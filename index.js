@@ -14,6 +14,8 @@ app.use(function (req, res, next) {
 
 const URL = 'https://35.240.172.28/middleware-api';
 
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+
 app.get('/echo', function (req, res, next) {
   rp.get({
     uri: URL + '/echo',
