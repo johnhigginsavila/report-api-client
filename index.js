@@ -16,6 +16,60 @@ const URL = 'https://35.240.172.28/middleware-api';
 
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
+// use body-parser middleware
+app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }));
+
+
+app.use(function prepare (req, res, next) {
+  const url = req.url.split('?')[0];
+  const method = req.method;
+  let query;
+  try {
+    query = JSON.parse(req.query);
+  } catch (e) {
+    query = req.query;
+  }
+  req.$scope = {
+    query: query,
+    url: url,
+    method: method,
+    headers: req.headers
+  };
+  next();
+});
+
+app.use('*', function sendRequest (req, res, next) {
+  const body = req.body;
+  console.log(req.body);
+  const options = {
+    uri: URL + req.$scope.url,
+    qs: { ...req.$scope.query },
+    headers: { 
+      'content-type': 'application/json',
+      'authorization': req.$scope.headers.authorization
+    },
+    body: body,
+    json: true
+  };
+  return rp[req.$scope.method.toLowerCase()](options)
+    .then(function (response) {
+      if (response.error) {
+        console.log(response.error);
+      }
+      res.setHeader('content-type', 'application/json');
+      res.status(response.httpCode).send(response);
+    })
+    .catch(function (response) {
+      res.setHeader('content-type', 'application/json');
+      if (response.response) {
+        res.status(response.response.statusCode).send(response.response.body);
+      }
+      else {
+        res.status(500).send(response);
+      }
+    });
+});
 app.get('/echo', function (req, res, next) {
   rp.get({
     uri: URL + '/echo',
@@ -24,10 +78,12 @@ app.get('/echo', function (req, res, next) {
     }
   })
     .then(function (response) {
-      res.status(200).send(response);
+      res.setHeader('content-type', 'application/json');
+      res.status(response.httpCode).send(response);
     })
-    .catch(function (err) {
-      res.status(500).send(err);
+    .catch(function (result) {
+      const err = result.response.body;
+      res.status(err.httpCode).send(err);
     });
 });
 
