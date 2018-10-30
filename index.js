@@ -14,9 +14,9 @@ app.use(function (req, res, next) {
 });
 
 
-// const URL = 'https://35.240.172.28/middleware-api';
+ const URL = 'https://35.240.172.28/middleware-api';
 
-const URL = 'http://localhost:3000';
+// const URL = 'http://localhost:3000';
 
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
