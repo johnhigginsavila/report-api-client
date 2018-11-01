@@ -54,6 +54,7 @@ app.post('/api/reports',
       }));
       req.body.medias = mediaUploads;
     }
+    console.log(JSON.stringify(req.body, null, 2));
     next();
   },
   function (req, res) {
