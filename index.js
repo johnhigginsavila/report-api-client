@@ -50,11 +50,10 @@ app.post('/api/reports',
     if (req.files && Array.isArray(req.files) && req.files.length > 0) {
       const mediaUploads = req.files.map((file) => ({
         platform: 'cloudinary',
-        metaData: JSON.stringify(file)
+        metaData: file
       }));
       req.body.medias = mediaUploads;
     }
-    console.log(JSON.stringify(req.body, null, 2));
     next();
   },
   function (req, res) {
