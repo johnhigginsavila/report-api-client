@@ -58,6 +58,16 @@ app.post('/api/reports',
   },
   function (req, res) {
     const body = req.body;
+    if (req.body.people) {
+      if (typeof req.body.people == 'string') {
+        try {
+          req.body.people = JSON.parse(req.body.people);
+        }
+        catch (e) {
+          
+        }
+      }
+    }
     const options = {
       uri: URL + req.$scope.url,
       qs: { ...req.$scope.query },
