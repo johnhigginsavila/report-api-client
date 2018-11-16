@@ -115,7 +115,7 @@ app.put('/api/auth/profilepic',
         'content-type': 'application/json',
         'authorization': req.$scope.headers.authorization
       },
-      body: body,
+      body: req.body,
       json: true
     };
     return rp[req.$scope.method.toLowerCase()](options)
