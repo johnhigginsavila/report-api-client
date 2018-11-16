@@ -98,6 +98,46 @@ app.post('/api/reports',
       });
   });
 
+app.put('/api/auth/profilepic',
+  uploads.multipleUpload('profilepic', 1, 'profilepics'),
+  function (req, res, next) {
+    const files = req.files;
+    if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+      req.body.file = req.files[0];
+    }
+    next();
+  },
+  function (req, res) {
+    const options = {
+      uri: URL + req.$scope.url,
+      qs: { ...req.$scope.query },
+      headers: { 
+        'content-type': 'application/json',
+        'authorization': req.$scope.headers.authorization
+      },
+      body: body,
+      json: true
+    };
+    return rp[req.$scope.method.toLowerCase()](options)
+      .then(function (response) {
+        if (response.error) {
+          console.log(response.error);
+        }
+        res.setHeader('content-type', 'application/json');
+        res.status(response.httpCode).send(response);
+      })
+      .catch(function (response) {
+        console.log(response);
+        res.setHeader('content-type', 'application/json');
+        if (response.response) {
+          res.status(response.response.statusCode).send(response.response.body);
+        }
+        else {
+          res.status(500).send(response);
+        }
+      });
+});
+
 app.use('*', function sendRequest (req, res, next) {
   const body = req.body;
   const options = {
