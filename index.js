@@ -98,13 +98,14 @@ app.post('/api/reports',
       });
   });
 
-app.put('/api/auth/profilepic',
+app.post('/api/auth/profilepic',
   uploads.multipleUpload('profilepic', 1, 'profilepics'),
   function (req, res, next) {
     const files = req.files;
     if (req.files && Array.isArray(req.files) && req.files.length > 0) {
       req.body.file = req.files[0];
     }
+    console.log(req.file);
     next();
   },
   function (req, res) {
@@ -118,7 +119,7 @@ app.put('/api/auth/profilepic',
       body: req.body,
       json: true
     };
-    return rp[req.$scope.method.toLowerCase()](options)
+    return rp.put(options)
       .then(function (response) {
         if (response.error) {
           console.log(response.error);
