@@ -1,4 +1,5 @@
 const CONFIG = {
+  middlewareUrl: process.env.MIDDLEWARE_URL,
   db: {
     HOST: process.env.DB_HOST,
     PORT: process.env.DB_PORT,

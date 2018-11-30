@@ -4,7 +4,7 @@ const rp = require('request-promise');
 const app = express();
 
 const uploads = require('./uploads');
-
+const config = require('./config');
 // Cors
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -14,7 +14,7 @@ app.use(function (req, res, next) {
 });
 
 
- const URL = 'https://35.240.172.28/middleware-api';
+ const URL = config.middlewareUrl +'/middleware-api';
 
 // const URL = 'http://localhost:3000';
 
