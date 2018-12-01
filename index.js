@@ -64,7 +64,17 @@ app.post('/api/reports',
           req.body.people = JSON.parse(req.body.people);
         }
         catch (e) {
-          
+          conslole.log(e);
+        }
+      }
+    }
+    if (req.body.category) {
+      if (typeof req.body.category == 'string') {
+        try {
+          req.body.category = JSON.parse(req.body.category);
+        }
+        catch (e) {
+          console.log(e);
         }
       }
     }
